@@ -340,6 +340,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
     tags,
     details,
     startDate,
+    createdBy,
     endDate,
     durationInWeeks,
     ...remainingData
@@ -352,6 +353,13 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "Please update startDate or endDate to change durationInWeeks",
+    );
+  }
+
+  if (createdBy) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "You can't change createdBy field!!",
     );
   }
 
@@ -484,7 +492,13 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
     }
 
     // get all updated data for response - with transaction
-    const result = await Course.findById(id).select("-__v").session(session);
+    const result = await Course.findById(id)
+      .populate({
+        path: "createdBy",
+        select: "_id username email role",
+      })
+      .select("-__v")
+      .session(session);
 
     // commit transaction
     await session.commitTransaction();
