@@ -1,6 +1,20 @@
 import { Schema, model } from "mongoose";
-import { IUser } from "./user.interface";
+import { IPasswordHistory, IUser } from "./user.interface";
 import { UserRoles } from "./user.constant";
+
+const passwordHistorySchema = new Schema<IPasswordHistory>(
+  {
+    password: {
+      type: String,
+    },
+    timestamps: {
+      type: Date,
+    },
+  },
+  {
+    _id: false,
+  },
+);
 
 const userSchema = new Schema<IUser>(
   {
@@ -26,6 +40,9 @@ const userSchema = new Schema<IUser>(
       type: String,
       enum: UserRoles,
       default: "user",
+    },
+    passwordHistory: {
+      type: [passwordHistorySchema],
     },
   },
   {
