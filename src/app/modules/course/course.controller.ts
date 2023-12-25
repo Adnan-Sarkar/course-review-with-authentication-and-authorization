@@ -5,7 +5,12 @@ import { CourseServices } from "./course.service";
 
 // create a course
 const createCourse = catchAsync(async (req, res) => {
-  const result = await CourseServices.createCourseIntoDB(req.body);
+  const payload = {
+    ...req.body,
+    createdBy: req.user._id,
+  };
+
+  const result = await CourseServices.createCourseIntoDB(payload);
 
   sendResponse(res, {
     success: true,

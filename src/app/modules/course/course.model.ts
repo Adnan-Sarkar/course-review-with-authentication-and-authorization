@@ -37,64 +37,69 @@ const detailsSchema = new Schema<TDetails>(
 );
 
 // create course schema
-const courseSchema = new Schema<TCourse>({
-  title: {
-    type: String,
-    required: [true, "Course title is required"],
-    trim: true,
-    unique: true,
+const courseSchema = new Schema<TCourse>(
+  {
+    title: {
+      type: String,
+      required: [true, "Course title is required"],
+      trim: true,
+      unique: true,
+    },
+    instructor: {
+      type: String,
+      required: [true, "Course instructor is required"],
+      trim: true,
+    },
+    categoryId: {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+      required: [true, "Course category id is required"],
+    },
+    price: {
+      type: Number,
+      required: [true, "Course price is required"],
+    },
+    tags: {
+      type: [tagSchema],
+      required: [true, "Course tag is required"],
+    },
+    startDate: {
+      type: String,
+      required: [true, "Course start date is required"],
+      trim: true,
+    },
+    endDate: {
+      type: String,
+      required: [true, "Course end date is required"],
+      trim: true,
+    },
+    language: {
+      type: String,
+      required: [true, "Course language is required"],
+      trim: true,
+    },
+    provider: {
+      type: String,
+      required: [true, "Course provider is required"],
+      trim: true,
+    },
+    durationInWeeks: {
+      type: Number,
+    },
+    details: {
+      type: detailsSchema,
+      required: [true, "Course details is required"],
+    },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "Course created by user id is required"],
+    },
   },
-  instructor: {
-    type: String,
-    required: [true, "Course instructor is required"],
-    trim: true,
+  {
+    timestamps: true,
   },
-  categoryId: {
-    type: Schema.Types.ObjectId,
-    ref: "Category",
-    required: [true, "Course category id is required"],
-  },
-  price: {
-    type: Number,
-    required: [true, "Course price is required"],
-  },
-  tags: {
-    type: [tagSchema],
-    required: [true, "Course tag is required"],
-  },
-  startDate: {
-    type: String,
-    required: [true, "Course start date is required"],
-    trim: true,
-  },
-  endDate: {
-    type: String,
-    required: [true, "Course end date is required"],
-    trim: true,
-  },
-  language: {
-    type: String,
-    required: [true, "Course language is required"],
-    trim: true,
-  },
-  provider: {
-    type: String,
-    required: [true, "Course provider is required"],
-    trim: true,
-  },
-  durationInWeeks: {
-    type: Number,
-  },
-  details: {
-    type: detailsSchema,
-    required: [true, "Course details is required"],
-  },
-  createdBy: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: [true, "Course created by user id is required"],
-  },
-});
+);
 
 // create pre middleware to implement duration in weeks
 courseSchema.pre("save", function (next) {

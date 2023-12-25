@@ -2,18 +2,18 @@ import express from "express";
 import { CourseController } from "./course.controller";
 import validateRequest from "../../middleware/validateRequest";
 import { CourseValidations } from "./course.validation";
+import auth from "../../middleware/auth";
 
-const courseRouter = express.Router();
 const coursesRouter = express.Router();
 
-// for route: /api/course
-courseRouter.post(
+coursesRouter.post(
   "/",
+  auth("admin"),
   validateRequest(CourseValidations.createCourseValidationSchema),
   CourseController.createCourse,
 );
 
-courseRouter.get("/best", CourseController.getBestCourse);
+coursesRouter.get("/best", CourseController.getBestCourse);
 
 // for route: /api/courses
 coursesRouter.get(
@@ -29,5 +29,4 @@ coursesRouter.put(
 
 coursesRouter.get("/", CourseController.getAllCourses);
 
-export const CourseRoutes = courseRouter;
 export const CoursesRoutes = coursesRouter;

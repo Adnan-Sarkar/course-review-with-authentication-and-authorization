@@ -129,6 +129,19 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
   // create pipeline for aggregation stages
   const pipeline: PipelineStage[] = [];
 
+  // Add a $lookup stage to populate the "createdBy" field
+  pipeline.push({
+    $lookup: {
+      from: "users",
+      localField: "createdBy",
+      foreignField: "_id",
+      as: "createdBy",
+    },
+  });
+  pipeline.push({
+    $unwind: "$createdBy",
+  });
+
   // pipeline statge for filtering - stage 1
   if (filterObj && Object.keys(filterObj).length) {
     pipeline.push({
@@ -156,7 +169,24 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
   // pipeline stage for project
   pipeline.push({
     $project: {
-      __v: 0,
+      _id: 1,
+      title: 1,
+      instructor: 1,
+      categoryId: 1,
+      price: 1,
+      tags: 1,
+      startDate: 1,
+      endDate: 1,
+      language: 1,
+      provider: 1,
+      durationInWeeks: 1,
+      details: 1,
+      "createdBy._id": 1,
+      "createdBy.username": 1,
+      "createdBy.email": 1,
+      "createdBy.role": 1,
+      createdAt: 1,
+      updatedAt: 1,
     },
   });
 
