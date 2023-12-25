@@ -4,3 +4,14 @@ export interface IUser {
   password: string;
   role: "user" | "admin";
 }
+
+export interface ILoginUser {
+  username: string;
+  password: string;
+}
+
+export interface IJWTPayload {
+  _id: string;
+  role: string;
+  email: string;
+}

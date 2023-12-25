@@ -19,8 +19,8 @@ const userSchema = new Schema<IUser>(
     password: {
       type: String,
       min: 5,
+      select: false,
       required: [true, "User password is required"],
-      select: 0,
     },
     role: {
       type: String,

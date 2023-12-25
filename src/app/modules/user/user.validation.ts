@@ -31,6 +31,24 @@ const createUserValidationSchema = z.object({
   }),
 });
 
+const loginUserValidationSchema = z.object({
+  username: z.string({
+    required_error: "User name is required!",
+    invalid_type_error: "User name must be string!",
+  }),
+  password: z
+    .string({
+      required_error: "User password is required!",
+      invalid_type_error: "User password must be string!",
+    })
+    .min(5)
+    .refine(passwordValidation, {
+      message:
+        "Invalid password. It must contain at least one lowercase letter, one uppercase letter, and one digit.",
+    }),
+});
+
 export const UserValidations = {
   createUserValidationSchema,
+  loginUserValidationSchema,
 };
