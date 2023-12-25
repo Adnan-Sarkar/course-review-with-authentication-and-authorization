@@ -1,10 +1,17 @@
 import httpStatus from "http-status";
 import AppError from "../../error/AppError";
-import { IJWTPayload, ILoginUser, IUser } from "./user.interface";
+import {
+  IJWTPayload,
+  ILoginUser,
+  IPasswordChange,
+  IUser,
+} from "./user.interface";
 import User from "./user.model";
 import bcrypt from "bcrypt";
-import { createToken } from "./user.utils";
+import { createToken, formatDateTime } from "./user.utils";
 import config from "../../config";
+import { JwtPayload } from "jsonwebtoken";
+import mongoose from "mongoose";
 
 // create user
 const createUserIntoDB = async (payload: IUser) => {
@@ -71,7 +78,124 @@ const login = async (payload: ILoginUser) => {
   return result;
 };
 
+// change password
+const changePassword = async (user: JwtPayload, payload: IPasswordChange) => {
+  // get the user
+  const currentUser = await User.findById(user._id).select(
+    "password passwordHistory",
+  );
+
+  if (!currentUser) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found!");
+  }
+
+  const { currentPassword, newPassword } = payload;
+  // check current passwrod is valid
+  const isCurrentPasswordValid = await bcrypt.compare(
+    currentPassword,
+    currentUser.password,
+  );
+
+  if (!isCurrentPasswordValid) {
+    return {
+      statusCode: httpStatus.BAD_REQUEST,
+      message: `Password change failed. Current password is incorrect.`,
+    };
+  }
+
+  // checked if the new password matches 2 latest password history
+  const latestTwoPasswordHistory = currentUser?.passwordHistory?.slice(-2);
+  if (
+    latestTwoPasswordHistory &&
+    (latestTwoPasswordHistory?.length as number) > 0
+  ) {
+    const [previousPassword1, previousPassword2] = latestTwoPasswordHistory;
+
+    if (
+      previousPassword1 &&
+      (await bcrypt.compare(newPassword, previousPassword1.password))
+    ) {
+      return {
+        statusCode: httpStatus.BAD_REQUEST,
+        message: `Password change failed. Ensure the new password is unique and not among the last 2 used (last used on ${formatDateTime(
+          previousPassword1.timestamp,
+        )}).`,
+      };
+    }
+
+    if (
+      previousPassword2 &&
+      (await bcrypt.compare(newPassword, previousPassword2.password))
+    ) {
+      return {
+        statusCode: httpStatus.BAD_REQUEST,
+        message: `Password change failed. Ensure the new password is unique and not among the last 2 used (last used on ${formatDateTime(
+          previousPassword2.timestamp,
+        )}).`,
+      };
+    }
+  }
+
+  // start session
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    // change the password history before update the new password
+    const newPasswordHistory = {
+      password: currentUser.password,
+      timestamp: new Date(),
+    };
+    await User.findByIdAndUpdate(
+      currentUser._id,
+      {
+        $push: {
+          passwordHistory: {
+            $each: [newPasswordHistory],
+            $slice: -2,
+          },
+        },
+      },
+      {
+        runValidators: true,
+        session,
+      },
+    );
+
+    // hashed new password
+    const hashedNewPassword = await bcrypt.hash(
+      newPassword,
+      Number(config.SALT_ROUND),
+    );
+
+    // change the password
+    const result = await User.findByIdAndUpdate(
+      currentUser._id,
+      {
+        password: hashedNewPassword,
+      },
+      {
+        runValidators: true,
+        session,
+        new: true,
+      },
+    );
+
+    await session.commitTransaction();
+    return {
+      data: result,
+    };
+  } catch (error: any) {
+    await session.abortTransaction();
+    throw new AppError(httpStatus.BAD_REQUEST, error?.message);
+  } finally {
+    await session.endSession();
+  }
+};
+
 export const UserServices = {
   login,
   createUserIntoDB,
+  changePassword,
 };

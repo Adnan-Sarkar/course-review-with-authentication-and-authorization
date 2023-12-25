@@ -7,7 +7,7 @@ const passwordHistorySchema = new Schema<IPasswordHistory>(
     password: {
       type: String,
     },
-    timestamps: {
+    timestamp: {
       type: Date,
     },
   },
@@ -43,6 +43,7 @@ const userSchema = new Schema<IUser>(
     },
     passwordHistory: {
       type: [passwordHistorySchema],
+      select: false,
     },
   },
   {

@@ -48,7 +48,31 @@ const loginUserValidationSchema = z.object({
     }),
 });
 
+const changePasswordValidationSchema = z.object({
+  currentPassword: z
+    .string({
+      required_error: "current Password is required!",
+      invalid_type_error: "current Password must be string!",
+    })
+    .min(5)
+    .refine(passwordValidation, {
+      message:
+        "Invalid current password format. It must contain at least one lowercase letter, one uppercase letter, and one digit.",
+    }),
+  newPassword: z
+    .string({
+      required_error: "New password is required!",
+      invalid_type_error: "New password must be string!",
+    })
+    .min(5)
+    .refine(passwordValidation, {
+      message:
+        "Invalid new password format. It must contain at least one lowercase letter, one uppercase letter, and one digit.",
+    }),
+});
+
 export const UserValidations = {
   createUserValidationSchema,
   loginUserValidationSchema,
+  changePasswordValidationSchema,
 };

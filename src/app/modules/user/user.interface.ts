@@ -1,13 +1,15 @@
 export interface IPasswordHistory {
   password: string;
-  timestamps: Date;
+  timestamp: Date;
 }
+
+export type TUserRoles = "user" | "admin";
 
 export interface IUser {
   username: string;
   email: string;
   password: string;
-  role: "user" | "admin";
+  role: TUserRoles;
   passwordHistory?: IPasswordHistory[];
   __v?: number;
 }
@@ -21,4 +23,9 @@ export interface IJWTPayload {
   _id: string;
   role: string;
   email: string;
+}
+
+export interface IPasswordChange {
+  currentPassword: string;
+  newPassword: string;
 }

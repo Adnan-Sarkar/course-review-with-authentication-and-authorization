@@ -28,3 +28,17 @@ export const createToken = (
 
   return jwt.sign(jwtPayload, secret);
 };
+
+export const formatDateTime = (date: Date): string => {
+  const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")} at ${date
+    .toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .toUpperCase()}`;
+
+  return formattedDate;
+};
