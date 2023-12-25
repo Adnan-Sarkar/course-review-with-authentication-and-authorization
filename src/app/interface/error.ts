@@ -3,5 +3,5 @@ export interface TErrorResponse {
   message: string;
   errorMessage: string;
   errorDetails: any;
-  stack: string;
+  stack: string | null;
 }

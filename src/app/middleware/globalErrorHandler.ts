@@ -19,6 +19,9 @@ const globalErrorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
     stack: "",
   };
 
+  // set the stack message
+  errorResponse.stack = error?.stack || "";
+
   // check error type
   if (error instanceof ZodError) {
     // zod error handler
@@ -43,9 +46,6 @@ const globalErrorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
   } else if (error instanceof Error) {
     errorResponse.errorMessage = error.message;
   }
-
-  // set the stack message
-  errorResponse.stack = error?.stack || "";
 
   res.status(httpStatus.BAD_REQUEST).json(errorResponse);
 };

@@ -11,7 +11,10 @@ const auth = (...permittedRoles: TUserRoles[]) => {
     const token = req.headers.authorization;
 
     if (!token) {
-      throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!!!");
+      throw new AppError(
+        httpStatus.UNAUTHORIZED,
+        "You do not have the necessary permissions to access this resource.",
+      );
     }
 
     // check if the token is valid
@@ -24,7 +27,10 @@ const auth = (...permittedRoles: TUserRoles[]) => {
     const { role } = decode;
 
     if (permittedRoles && !permittedRoles.includes(role)) {
-      throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!!!");
+      throw new AppError(
+        httpStatus.UNAUTHORIZED,
+        "You do not have the necessary permissions to access this resource.",
+      );
     }
 
     req.user = decode;

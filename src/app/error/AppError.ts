@@ -1,3 +1,4 @@
+import httpStatus from "http-status";
 import { TErrorResponse } from "../interface/error";
 
 class AppError extends Error {
@@ -15,6 +16,16 @@ class AppError extends Error {
   }
 
   public generateErrorResponse(): TErrorResponse {
+    if (this.statusCode === httpStatus.UNAUTHORIZED) {
+      return {
+        success: false,
+        message: "Unauthorized Access",
+        errorMessage: this.message,
+        errorDetails: null,
+        stack: null,
+      };
+    }
+
     return {
       success: false,
       message: "",
