@@ -17,10 +17,14 @@ const createReviewIntoDB = async (payload: TReview) => {
     );
   }
 
-  const createdReview = await Review.create(payload);
+  const newReview = await Review.create(payload);
 
-  const result = createdReview.toObject();
-  delete result.__v;
+  const result = await Review.findById(newReview._id)
+    .populate({
+      path: "createdBy",
+      select: "_id username email role",
+    })
+    .select("-__v");
 
   return result;
 };
