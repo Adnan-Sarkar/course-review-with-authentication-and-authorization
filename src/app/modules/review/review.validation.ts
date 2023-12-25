@@ -16,6 +16,10 @@ const reviewAllRequired = z.object({
     invalid_type_error: "Course review must be string",
     required_error: "Course review is required",
   }),
+  createdBy: z.string({
+    invalid_type_error: "Review created by user id must be string",
+    required_error: "Review created by user id is required",
+  }),
 });
 
 export const ReviewValidations = {

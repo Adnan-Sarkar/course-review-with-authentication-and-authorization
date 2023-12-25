@@ -57,6 +57,10 @@ const courseAllRequired = z.object({
       required_error: "Course description is required",
     }),
   }),
+  createdBy: z.string({
+    invalid_type_error: "Course created by user id must be string",
+    required_error: "Course created by user id is required",
+  }),
 });
 
 const courseAllOptional = z.object({
@@ -140,6 +144,12 @@ const courseAllOptional = z.object({
           required_error: "Course description is required",
         })
         .optional(),
+    })
+    .optional(),
+  createdBy: z
+    .string({
+      invalid_type_error: "Course created by user id must be string",
+      required_error: "Course created by user id is required",
     })
     .optional(),
 });
