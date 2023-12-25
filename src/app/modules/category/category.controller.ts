@@ -5,7 +5,12 @@ import { CategoryServices } from "./category.service";
 
 // create a category
 const createCategory = catchAsync(async (req, res) => {
-  const result = await CategoryServices.createCategoryIntoDB(req.body);
+  const payload = {
+    ...req.body,
+    createdBy: req.user._id,
+  };
+
+  const result = await CategoryServices.createCategoryIntoDB(payload);
 
   sendResponse(res, {
     success: true,

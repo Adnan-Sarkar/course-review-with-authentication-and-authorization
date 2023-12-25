@@ -13,7 +13,12 @@ const createCategoryIntoDB = async (payload: TCategory) => {
 
 // get all categories
 const getAllCategorieFromDB = async () => {
-  const result = await Category.find().select("-__v");
+  const result = await Category.find()
+    .populate({
+      path: "createdBy",
+      select: "_id username email role",
+    })
+    .select("-__v");
 
   return result;
 };
