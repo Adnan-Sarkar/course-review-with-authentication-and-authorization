@@ -4,8 +4,13 @@ import validateRequest from "../../middleware/validateRequest";
 import { CourseValidations } from "./course.validation";
 import auth from "../../middleware/auth";
 
+const courseRouter = express.Router();
 const coursesRouter = express.Router();
 
+// for route: /api/course
+courseRouter.get("/best", CourseController.getBestCourse);
+
+// for route: /api/courses
 coursesRouter.post(
   "/",
   auth("admin"),
@@ -13,9 +18,6 @@ coursesRouter.post(
   CourseController.createCourse,
 );
 
-coursesRouter.get("/best", CourseController.getBestCourse);
-
-// for route: /api/courses
 coursesRouter.get(
   "/:courseId/reviews",
   CourseController.getCourseByIdWithReviews,
@@ -23,6 +25,7 @@ coursesRouter.get(
 
 coursesRouter.put(
   "/:courseId",
+  auth("admin"),
   validateRequest(CourseValidations.updateCourseValidationSchema),
   CourseController.updateCourse,
 );
@@ -30,3 +33,4 @@ coursesRouter.put(
 coursesRouter.get("/", CourseController.getAllCourses);
 
 export const CoursesRoutes = coursesRouter;
+export const CourseRoutes = courseRouter;
