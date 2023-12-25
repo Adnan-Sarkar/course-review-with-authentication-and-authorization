@@ -19,6 +19,11 @@ const reviewSchema = new Schema<TReview>({
     trim: true,
     required: [true, "Review text is required"],
   },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: [true, "Review created by user id is required"],
+  },
 });
 
 // create review model
