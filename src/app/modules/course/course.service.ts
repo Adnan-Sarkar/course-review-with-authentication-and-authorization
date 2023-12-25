@@ -207,7 +207,13 @@ const getCourseByIdWithReviewsFromDB = async (id: string) => {
     session.startTransaction();
 
     // find the course - transaction 1
-    const course = await Course.findById(id).select("-__v").session(session);
+    const course = await Course.findById(id)
+      .populate({
+        path: "createdBy",
+        select: "_id username email role",
+      })
+      .select("-__v")
+      .session(session);
 
     // checked whether the course exists or not
     if (!course) {
@@ -221,7 +227,11 @@ const getCourseByIdWithReviewsFromDB = async (id: string) => {
     const reviews = await Review.find({
       courseId: id,
     })
-      .select({ courseId: 1, rating: 1, review: 1 })
+      .populate({
+        path: "createdBy",
+        select: "_id username email role",
+      })
+      .select("-__v")
       .session(session);
 
     // checked whether the course reviews exists or not
@@ -307,14 +317,20 @@ const getBestCourseFromDB = async () => {
     const bestCourse: Document<any, any> | null = await Course.findById(
       bestCourseId,
     )
+      .populate({
+        path: "createdBy",
+        select: "_id username email role",
+      })
       .select("-__v")
       .session(session);
 
     if (bestCourse) {
       // convert mongoose Document to pure object
-      const result = bestCourse.toObject();
-      result.averageRating = averageRating;
-      result.reviewCount = reviewCount;
+      const result = {
+        course: bestCourse.toObject(),
+        averageRating,
+        reviewCount,
+      };
 
       // commit transaction
       await session.commitTransaction();
