@@ -9,6 +9,11 @@ const categorySchema = new Schema<TCategory>({
     trim: true,
     unique: true,
   },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: [true, "Category created by user id is required"],
+  },
 });
 
 // create category model
