@@ -89,6 +89,11 @@ const courseSchema = new Schema<TCourse>({
     type: detailsSchema,
     required: [true, "Course details is required"],
   },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: [true, "Course created by user id is required"],
+  },
 });
 
 // create pre middleware to implement duration in weeks

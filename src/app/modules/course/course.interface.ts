@@ -22,5 +22,6 @@ export interface TCourse {
   provider: string;
   durationInWeeks: number;
   details: TDetails;
+  createdBy: Types.ObjectId;
   __v?: number;
 }
