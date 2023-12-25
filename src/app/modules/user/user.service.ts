@@ -26,7 +26,9 @@ const createUserIntoDB = async (payload: IUser) => {
   const createdUser = await User.create(payload);
 
   // remove password field
-  const { password, __v, ...result } = { ...createdUser.toObject() };
+  const { password, __v, passwordHistory, ...result } = {
+    ...createdUser.toObject(),
+  };
 
   return result;
 };
