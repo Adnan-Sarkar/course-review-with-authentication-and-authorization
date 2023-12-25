@@ -20,7 +20,7 @@ route.post(
 
 route.post(
   "/change-password",
-  auth("user"),
+  auth("user", "admin"),
   validateRequest(UserValidations.changePasswordValidationSchema),
   UserController.changePassword,
 );
