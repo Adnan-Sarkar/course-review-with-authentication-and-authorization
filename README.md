@@ -2,13 +2,25 @@
 
 ## Table of Contents
 
+- [API Documentation](#api-documentation)
 - [Live Server Test](#live-server-test)
-  - [Live API](#live-api)
+  - [API Endpoints](#api-endpoints)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation locally](#installation-locally)
   - [Running the Application](#running-the-application)
-- [API Endpoints](#api-endpoints)
+
+## API Documentation
+
+This documentation, generated with Postman.
+
+```bash
+  Live link: `https://documenter.getpostman.com/view/15069256/2s9Ykt4ymL`
+```
+
+Or,
+
+[Click API Documentation](https://documenter.getpostman.com/view/15069256/2s9Ykt4ymL)
 
 ## Live Server Test
 
@@ -17,17 +29,25 @@ To test the live API endpoints, I prefer using [Postman](https://www.postman.com
 ### Live API
 
 ```bash
-course-review-backend-by-adnan-sarkar.vercel.app
+https://course-review-with-auth-by-adnan-sarkar.vercel.app/
 ```
+
+## API Endpoints
+
+for `user`
+
+- **POST** /api/auth/register
+- **POST** /api/auth/login
+- **POST** /api/auth/change-password
 
 for `course`
 
-- **POST** /api/course
-- **GET** /api/course/best
-  <br>
+- **POST** /api/courses
 - **GET** /api/courses
 - **GET** /api/courses/:courseId/reviews
 - **PUT** /api/courses/:courseId
+  <br>
+- **GET** /api/course/best
 
 for `category`
 
@@ -51,13 +71,13 @@ These instructions will help you set up and run the application on your local ma
 1. Clone the repository:
 
 ```bash
-https://github.com/Porgramming-Hero-web-course/l2b2a3-course-review-Adnan-Sarkar.git
+https://github.com/Porgramming-Hero-web-course/l2b2a4-course-review-with-auth-Adnan-Sarkar.git
 ```
 
 2. Navigate to the project directory:
 
 ```bash
-cd course-review-backend
+cd course-review-with-authentication-and-authorization
 ```
 
 3. Install dependencies:
@@ -70,7 +90,10 @@ npm install
 
 ```bash
 PORT=...
+SALT_ROUND=...
 DB_URL=...
+JWT_ACCESS_TOKEN_SECRET=...
+JWT_ACCESS_TOKEN_EXPIRES_IN=...
 ```
 
 ### Running the Application
@@ -93,29 +116,9 @@ npm run start:dev
 npm run start:prod
 ```
 
-## API Endpoints
-
-for `course`
-
-- **POST** /api/course
-- **GET** /api/course/best
-  <br>
-- **GET** /api/courses
-- **GET** /api/courses/:courseId/reviews
-- **PUT** /api/courses/:courseId
-
-for `category`
-
-- **POST** /api/categories
-- **GET** /api/categories
-
-for `review`
-
-- **POST** /api/reviews
-
 <br><br>
 
-Thank you for exploring the `Course Review` backend application! Feel free to provide feedback, report issues.
+Thank you for exploring the `Course Review With Authentication & Authorization` backend application! Feel free to provide feedback, report issues.
 
 ## 📢 Social Links
 
