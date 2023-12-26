@@ -20,7 +20,9 @@ const getAllCategorieFromDB = async () => {
     })
     .select("-__v");
 
-  return result;
+  return {
+    categories: result,
+  };
 };
 
 export const CategoryServices = {
