@@ -15,10 +15,12 @@ app.use("/api", globalRouter);
 app.get("/", (_req: Request, res: Response) => {
   res.status(200).json({
     success: true,
-    message: "Welcome to the course review backend API",
-    details: "For API details, visit /api/courses",
+    message:
+      "Welcome to the course review with authentication and authorization backend API",
+    details:
+      "For github repository, visit: https://github.com/Porgramming-Hero-web-course/l2b2a4-course-review-with-auth-Adnan-Sarkar",
     documentation:
-      "For detailed documentation, visit: https://github.com/Porgramming-Hero-web-course/l2b2a3-course-review-Adnan-Sarkar",
+      "For API documentation, visit: https://documenter.getpostman.com/view/15069256/2s9Ykt4ymL",
   });
 });
 
