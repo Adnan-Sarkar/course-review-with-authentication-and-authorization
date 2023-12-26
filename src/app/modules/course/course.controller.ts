@@ -31,7 +31,7 @@ const getAllCourses = catchAsync(async (req, res) => {
     meta: {
       page: Number(req?.query?.page) || 1,
       limit: Number(req?.query?.limit) || 10,
-      total: result.length,
+      total: result.courses.length,
     },
     data: result,
   });
@@ -45,7 +45,7 @@ const getCourseByIdWithReviews = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "Course and Reviews retrieved successfully",
+    message: "Course with reviews retrieved successfully",
     data: result,
   });
 });

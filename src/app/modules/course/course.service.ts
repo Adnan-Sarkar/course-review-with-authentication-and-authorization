@@ -192,7 +192,7 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 
   const result = await Course.aggregate(pipeline);
 
-  return result;
+  return { courses: result };
 };
 
 // get course by id with reviews
@@ -304,12 +304,16 @@ const getBestCourseFromDB = async () => {
       },
     ]).session(session);
 
-    const { _id: bestCourseId, averageRating, reviewCount } = getBestCourse[0];
+    const {
+      _id: bestCourseId,
+      averageRating,
+      reviewCount,
+    } = getBestCourse[0] || {};
 
     if (!bestCourseId) {
       throw new AppError(
         httpStatus.NOT_FOUND,
-        "No best course found based on rating",
+        "No best course found based on rating, please give a review!",
       );
     }
 
